@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>桌宠状态动画预览</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Microsoft YaHei", system-ui, sans-serif; }
+    body { margin: 0; padding: 28px; background: #131820; color: #edf1f8; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p { margin: 0 0 24px; color: #aeb8c8; }
+    main { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+    article { overflow: hidden; border: 1px solid #3a4659; border-radius: 14px; background: #202936; }
+    img { display: block; width: 100%; height: 250px; object-fit: contain; background: radial-gradient(circle at center, #354053, #202936 70%); }
+    h2 { margin: 0; padding: 12px 14px 14px; font-size: 15px; font-weight: 500; }
+    code { color: #c6d8fa; }
+  </style>
+</head>
+<body>
+  <h1>桌宠状态动画</h1>
+  <p>十个透明循环动画。程序实际使用各目录中的 <code>000.png–011.png</code>，播放速度见 <code>manifest.json</code>。</p>
+  <main>
+    <article><img src="idle/preview.webp" alt="待机动画"><h2>待机 · idle</h2></article>
+    <article><img src="blink/preview.webp" alt="眨眼动画"><h2>眨眼 · blink</h2></article>
+    <article><img src="happy/preview.webp" alt="开心动画"><h2>开心 · happy</h2></article>
+    <article><img src="talk/preview.webp" alt="对话动画"><h2>对话 · talk</h2></article>
+    <article><img src="thinking/preview.webp" alt="思考动画"><h2>思考 · thinking</h2></article>
+    <article><img src="embarrassed/preview.webp" alt="害羞动画"><h2>害羞 · embarrassed</h2></article>
+    <article><img src="shy_angry/preview.webp" alt="羞怒动画"><h2>羞怒 · shy_angry</h2></article>
+    <article><img src="angry/preview.webp" alt="生气动画"><h2>生气 · angry</h2></article>
+    <article><img src="strong_angry/preview.webp" alt="强烈生气动画"><h2>最高愤怒 · strong_angry</h2></article>
+    <article><img src="sleep/preview.webp" alt="休息动画"><h2>休息 · sleep</h2></article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "default_fps": 8,
+  "fps": {
+    "idle": 6,
+    "blink": 75,
+    "happy": 8,
+    "talk": 12,
+    "thinking": 6,
+    "embarrassed": 8,
+    "shy_angry": 10,
+    "angry": 12,
+    "strong_angry": 12,
+    "sleep": 4
+  },
+  "frame_count": 12,
+  "canvas": [
+    701,
+    768
+  ]
+}

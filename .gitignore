@@ -1,0 +1,10 @@
+.venv/
+.test-tmp/
+__pycache__/
+*.pyc
+*.log
+.env
+.env.*
+data/
+config.json
+config.json.tmp
