@@ -24,7 +24,7 @@ class UsagePopup(QWidget):
         self.demo = demo
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
-        self.setFixedSize(256, 110)
+        self.setFixedSize(256, 124)
         self.delta = UsageDelta()
         self.quota_change = None
         self.quota_changes = {}
@@ -45,7 +45,7 @@ class UsagePopup(QWidget):
                       and self.quota_change is None else delta)
         self.quota_change = None
         self.quota_changes.clear()
-        self.setFixedSize(256, 110)
+        self.setFixedSize(256, 124)
         self._present()
 
     def push_quota(self, change):
@@ -62,7 +62,8 @@ class UsagePopup(QWidget):
             previous = self.quota_changes.get(key)
             self.quota_changes[key] = previous.merged(change) if previous else change
         self.quota_change = next(iter(self.quota_changes.values()))
-        self.setFixedSize(236, 52 + 66 * len(self.quota_changes))
+        # 主气泡下方预留思考圆点，让提示像从角色头顶冒出的想法。
+        self.setFixedSize(236, 126 + 66 * (len(self.quota_changes) - 1))
         self._present()
 
     def _present(self):
@@ -166,11 +167,8 @@ class UsagePopup(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setOpacity(self.opacity)
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(0, 0, 0, 24))
-        painter.drawRoundedRect(QRectF(5, 7, 246, 100), 14, 14)
-        painter.setBrush(QColor(32, 33, 35, 238))
-        painter.drawRoundedRect(QRectF(4, 3, 246, 100), 12, 12)
+        bubble = QRectF(4, 3, 246, 100)
+        self._paint_thought_shell(painter, bubble)
         painter.setPen(QColor("#FFFFFF"))
         painter.setFont(QFont("Microsoft YaHei", 13, QFont.Weight.DemiBold))
         painter.drawText(QRectF(18, 12, 220, 29), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
@@ -187,13 +185,8 @@ class UsagePopup(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setOpacity(self.opacity)
-        rect = QRectF(self.rect()).adjusted(4, 3, -5, -7)
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(0, 0, 0, 30))
-        painter.drawRoundedRect(rect.translated(1, 3), 13, 13)
-        painter.setPen(QPen(QColor(190, 190, 195, 65), 0.7))
-        painter.setBrush(QColor(30, 31, 33, 240))
-        painter.drawRoundedRect(rect, 13, 13)
+        rect = QRectF(self.rect()).adjusted(4, 3, -5, -22)
+        self._paint_thought_shell(painter, rect)
         def line(text, y, size, color, bold=False, right=False):
             font = QFont("Microsoft YaHei")
             font.setPixelSize(size)
@@ -203,7 +196,7 @@ class UsagePopup(QWidget):
             painter.drawText(QRectF(18, y, self.width()-36, 26),
                              (Qt.AlignmentFlag.AlignRight if right else Qt.AlignmentFlag.AlignLeft)
                              | Qt.AlignmentFlag.AlignVCenter, text)
-        line("◉  Codex Usage" + (" · 演示" if self.demo else ""), 10, 11, "#b8b8bc")
+        line("✦  Codex Usage" + (" · 演示" if self.demo else ""), 10, 11, "#b8b8bc")
         changes = sorted(self.quota_changes.values(), key=lambda c: c.snapshot.period != "5h")
         for index, change in enumerate(changes):
             snapshot = change.snapshot
@@ -214,3 +207,21 @@ class UsagePopup(QWidget):
             line(f"-{change.consumed:g}{unit}", y, 12, "#b8b8bc", right=True)
             remaining = f"{snapshot.remaining:g}{unit}" if snapshot.remaining is not None else "未知"
             line(f"剩余 {remaining}", y+24, 20, "#f3f3f4", True)
+
+    def _paint_thought_shell(self, painter, rect):
+        """绘制统一的想法气泡外壳；圆点朝向下方角色头顶。"""
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(0, 0, 0, 34))
+        painter.drawRoundedRect(rect.translated(1, 3), 17, 17)
+        painter.setPen(QPen(QColor(195, 195, 200, 72), 0.7))
+        painter.setBrush(QColor(30, 31, 33, 232))
+        painter.drawRoundedRect(rect, 17, 17)
+
+        # 两个由大到小的圆点形成“思考”尾巴，最小圆点最靠近角色。
+        center_x = rect.center().x() + min(28, rect.width() * .12)
+        for radius, dy, alpha in ((5.0, 7.0, 224), (2.8, 15.0, 188)):
+            center_y = rect.bottom() + dy
+            painter.setPen(QPen(QColor(195, 195, 200, min(alpha, 82)), 0.6))
+            painter.setBrush(QColor(30, 31, 33, alpha))
+            painter.drawEllipse(QRectF(center_x-radius, center_y-radius,
+                                       radius*2, radius*2))
