@@ -4,7 +4,7 @@ Windows 上使用 Python 与 PySide6 制作的 GPT 风格桌面角色，支持�
 
 ## 下载与首次安装
 
-1. 打开 GitHub 的 **Releases** 页面并下载最新的 `GPT-Desktop-Companion-*-Windows.zip`。
+1. 打开 GitHub 的 **Releases** 页面，在最新版本下下载 **Source code (zip)**。
 2. 解压到普通文件夹，不要直接在压缩包内运行。
 3. 安装 [Python 3.11 或更高版本](https://www.python.org/downloads/windows/)，安装时勾选 **Add Python to PATH**。
 4. 双击 `install.bat`，等待它创建项目专用 `.venv` 并安装 PySide6。
