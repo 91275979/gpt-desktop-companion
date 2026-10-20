@@ -1,3 +1,17 @@
+# GPT 桌宠 1.0
+
+Windows 上使用 Python 与 PySide6 制作的 GPT 风格桌面角色，支持透明置顶、角色状态动画、互动情绪、Codex 配额、天气和主要市场行情。
+
+## 下载与首次安装
+
+1. 打开 GitHub 的 **Releases** 页面并下载最新的 `GPT-Desktop-Companion-*-Windows.zip`。
+2. 解压到普通文件夹，不要直接在压缩包内运行。
+3. 安装 [Python 3.11 或更高版本](https://www.python.org/downloads/windows/)，安装时勾选 **Add Python to PATH**。
+4. 双击 `install.bat`，等待它创建项目专用 `.venv` 并安装 PySide6。
+5. 安装完成后双击 `start.vbs` 启动；以后只需要双击 `start.vbs`。
+
+源码用户也可以点击 GitHub 仓库右上角 **Code → Download ZIP**。本项目使用 [MIT License](LICENSE) 开源。
+
 ## Windows 启动和快捷方式
 
 - 双击项目根目录的 `start.vbs`：无终端窗口启动，推荐日常使用。
@@ -16,9 +30,7 @@ C:\Windows\System32\wscript.exe "D:\gpt-desktop-companion\start.vbs"
 
 新增 `settings.py` 管理偏好，`launch.py` 处理依赖及启动失败提示，`start.vbs` 提供隐藏启动。配置文件不提交到 Git。删除 `config.json` 可以恢复默认设置（先退出桌宠）。
 
-# GPT 桌宠 1.0
-
-Windows 上的 Python + PySide6 桌宠。日常启动无需 API Key，不自动调用模型；默认通过本机 Codex 的只读接口获取配额。另有可选的 Responses API usage 接入模块。
+日常启动无需 API Key，不自动调用模型；默认通过本机 Codex 的只读接口获取配额。另有可选的 Responses API usage 接入模块。
 
 ## 启动
 
