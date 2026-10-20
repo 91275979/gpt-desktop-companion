@@ -1,5 +1,6 @@
 import unittest
 from dataclasses import replace
+from datetime import datetime
 
 from PySide6.QtWidgets import QApplication
 from codex_quota import parse_quota
@@ -104,6 +105,8 @@ class QuotaProviderTests(unittest.TestCase):
             pet.show()
             pet.update_quota(QuotaUpdate((self.base,)))
             pet.settle_usage()
+            expected_time = datetime.fromtimestamp(self.base.fetched_at).strftime('%H:%M:%S')
+            self.assertEqual(pet.panel.usage.updated_at_label.text(), f'更新 {expected_time}')
             self.assertEqual(pet.usage_popup.phase, 'hidden')
             next_snapshot = replace(self.base, used=21, remaining=79, fetched_at=1002)
             pet.update_quota(QuotaUpdate((next_snapshot,)))

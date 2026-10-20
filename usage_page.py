@@ -21,6 +21,8 @@ class UsagePage(QWidget):
         self.add_label(title_row, "Usage", "font-size: 15px; font-weight: 600;")
         self.subtitle = self.add_label(title_row, "Codex 额度", "color: #999; font-size: 9px;")
         title_row.addStretch()
+        self.updated_at_label = self.add_label(title_row, "尚未更新", "color: #888; font-size: 8px;")
+        self.updated_at_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         layout.addLayout(title_row)
         self.cards = {}
         cards_row = QVBoxLayout()
@@ -104,6 +106,13 @@ class UsagePage(QWidget):
         if error:
             status = "额度数据暂不可用" + (" · 保留上次结果\n" + status if stamp else "")
         self.quota_status.setText(status)
+        if stamp:
+            prefix = "上次" if error else "更新"
+            self.updated_at_label.setText(f'{prefix} {datetime.fromtimestamp(stamp):%H:%M:%S}')
+            self.updated_at_label.setToolTip(status)
+        else:
+            self.updated_at_label.setText("尚未更新")
+            self.updated_at_label.setToolTip(error or "等待额度数据")
 
 
     def update_usage(self, snapshot, demo=False):
