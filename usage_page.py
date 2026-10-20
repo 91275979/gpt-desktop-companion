@@ -25,6 +25,7 @@ class UsagePage(QWidget):
         self.updated_at_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         layout.addLayout(title_row)
         self.cards = {}
+        self.period_labels = {}
         cards_row = QVBoxLayout()
         cards_row.setSpacing(4)
         for period, title in (("5h", "5 小时"), ("week", "每周")):
@@ -38,7 +39,8 @@ class UsagePage(QWidget):
             inner.setSpacing(0)
             summary = QHBoxLayout()
             summary.setSpacing(4)
-            self.add_label(summary, title, "color: #bbb; font-size: 9px;")
+            period_label = self.add_label(summary, title, "color: #bbb; font-size: 9px;")
+            self.period_labels[period] = period_label
             summary.addStretch()
             remaining = self.add_label(summary, "暂不可用", "font-size: 14px; font-weight: 600;")
             inner.addLayout(summary)
@@ -93,11 +95,16 @@ class UsagePage(QWidget):
             value = f"{snapshot.remaining:g}{unit}" if snapshot.remaining is not None else "未知"
             remaining.setText(f"剩余 {value}")
             reset = datetime.fromtimestamp(snapshot.reset_time).strftime("%m-%d %H:%M") if snapshot.reset_time else "未提供"
+            compact_reset = (datetime.fromtimestamp(snapshot.reset_time).strftime(
+                "%H:%M" if period == "5h" else "%m-%d %H:%M")
+                if snapshot.reset_time else "未知")
+            period_title = "5 小时" if period == "5h" else "每周"
+            self.period_labels[period].setText(f"{period_title} · 重置 {compact_reset}")
             detail.setText(f"已用 {snapshot.used:g}{unit}\n重置 {reset}" + (" · 旧数据" if stale else ""))
             card.setToolTip(f"{remaining.text()}\n{detail.text()}")
             bar.setVisible(snapshot.percentage is not None)
             bar.setValue(round((100-(snapshot.percentage or 0))*10))
-            title = "5 小时" if period == "5h" else "每周"
+            title = period_title
             amount = f"-{recent:g}" if recent else "0"
             recent_lines.append(f"{title}    {amount}{unit}")
         self.recent_label.setText("\n".join(recent_lines) or "暂无变化")

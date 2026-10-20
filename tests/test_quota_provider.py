@@ -107,6 +107,9 @@ class QuotaProviderTests(unittest.TestCase):
             pet.settle_usage()
             expected_time = datetime.fromtimestamp(self.base.fetched_at).strftime('%H:%M:%S')
             self.assertEqual(pet.panel.usage.updated_at_label.text(), f'更新 {expected_time}')
+            expected_reset = datetime.fromtimestamp(self.base.reset_time).strftime('%H:%M')
+            self.assertEqual(pet.panel.usage.period_labels['5h'].text(),
+                             f'5 小时 · 重置 {expected_reset}')
             self.assertEqual(pet.usage_popup.phase, 'hidden')
             next_snapshot = replace(self.base, used=21, remaining=79, fetched_at=1002)
             pet.update_quota(QuotaUpdate((next_snapshot,)))
